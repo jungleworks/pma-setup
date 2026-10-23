@@ -1,0 +1,10 @@
+services:
+  pma:
+    image: phpmyadmin:latest
+    container_name: pma
+    restart: unless-stopped
+    pull_policy: always
+    network_mode: host
+    environment:
+      PMA_HOST: 127.0.0.1
+      APACHE_PORT: 444
