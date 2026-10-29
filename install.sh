@@ -25,7 +25,15 @@ esac
 
 # 1. Install Docker and start it now + on every boot
 yum install -y docker
-systemctl enable --now docker
+if command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
+    systemctl enable --now docker
+else
+    # No systemd (e.g. Amazon Linux 1 / SysV init): fall back to service
+    service docker start
+    if command -v chkconfig >/dev/null 2>&1; then
+        chkconfig docker on
+    fi
+fi
 
 # 2. Install the latest Docker Compose plugin (system-wide)
 PLUGIN_DIR=/usr/local/lib/docker/cli-plugins
